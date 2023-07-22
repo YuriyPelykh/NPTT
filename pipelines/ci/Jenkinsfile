@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Pull code from SCM') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     credentialsId: "${GITHUB_CREDENTIAL_ID}",
                     url: "${GITHUB_REPO}"
                 sh "ls -lah"
