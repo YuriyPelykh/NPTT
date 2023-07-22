@@ -7,7 +7,9 @@ pipeline {
     environment {
         GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
         GITHUB_CREDENTIAL_ID = "Jenkins_GitHub_Key"
-        // DOCKERHUB_CREDENTIAL_ID = ""
+        DOCKERHUB_CREDENTIALS_ID = credentials('DockerHub_Creds')
+        DOCKERHUB_REPO = "yuriypelykh"
+        DOCKER_IMAGE_NAME = "ypwp-php-fpm"
     }
     
     stages {
@@ -34,13 +36,15 @@ pipeline {
 
         stage('Containerize App') {
             steps {
-                sh 'docker build -t yuriypelykh/ypwp-php-fpm:${BUILD_NUMBER} -t yuriypelykh/ypwp-php-fpm:latest .'
+                sh 'docker build -t ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} -t yuriypelykh/ypwp-php-fpm:latest .'
             }
         }
 
-        stage('Push to registry') {
+        stage('Push image to registry') {
             steps {
-                echo "Push"
+                sh "echo \"${DOCKERHUB_CREDENTIALS_ID_PSW}\" | docker login -u \"${DOCKERHUB_CREDENTIALS_ID_USR}\" --password-stdin; \
+                    docker push \"${DOCKERHUB_REPO}\"/\"${DOCKER_IMAGE_NAME}\":\"${BUILD_NUMBER}\"; \
+                    docker push \"${DOCKERHUB_REPO}\"/\"${DOCKER_IMAGE_NAME}\":latest"
             }
         }
     }
