@@ -4,6 +4,10 @@ pipeline {
     
     agent any
 
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
+    }
+
     environment {
         DOCKER_COMPOSE_ENV_FILE = credentials('Docker-compose-env-file')
     }
