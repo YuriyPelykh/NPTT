@@ -11,6 +11,7 @@ pipeline {
     stages {
         stage('Deploy') {
             steps {
+                echo "${IMAGE_TAG}"
                 sh "docker-compose --env-file ${DOCKER_COMPOSE_ENV_FILE} up -d --force-recreate --no-deps php-fpm"
             }
         }
