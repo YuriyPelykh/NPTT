@@ -18,8 +18,8 @@ services:
   php-fpm:
     depends_on:
       - db
-    build: ./
-    # image: yuriypelykh/php8-fpm-mysqli
+    # build: ./
+    image: yuriypelykh/ypwp-php-fpm:latest
     container_name: php-fpm
     restart: unless-stopped
     env_file:

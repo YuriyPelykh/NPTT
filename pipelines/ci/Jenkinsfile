@@ -47,5 +47,11 @@ pipeline {
                     docker push \"${DOCKERHUB_REPO}\"/\"${DOCKER_IMAGE_NAME}\":latest"
             }
         }
+
+        stage('Trigger Deploy job') {
+            steps {
+                build 'CD-Pipeline'
+            }
+        }
     }
 }
