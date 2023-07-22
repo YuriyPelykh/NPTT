@@ -1,24 +1,40 @@
 #!/usr/bin/env groovy
 
 pipeline {
+    
     agent any
 
     environment {
-        GIT_REPO = "YuriyPelykh/NPTT"
-        // GIT_CREDENTIAL_ID = "NPTT-Git-SSH"
+        GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
+        GITHUB_CREDENTIAL_ID = "Jenkins_GitHub_Key"
         // DOCKERHUB_CREDENTIAL_ID = ""
     }
     
     stages {
-        stage('Pull from SCM') {
+        stage('Pull code from SCM') {
             steps {
-                echo "Hi There!"
+                git branch: 'main',
+                    credentialsId: "${GITHUB_CREDENTIAL_ID}",
+                    url: "${GITHUB_REPO}"
+                sh "ls -lah"
             }
         }
 
-        stage('Containerize app') {
+        stage('Dockerfiles lint') {
+            agent {
+                docker {
+                    image 'hadolint/hadolint:latest-debian'
+                    args '-v ${WORKSPACE}/:/mnt/'
+                }
+            }
             steps {
-                echo "Build"
+                sh 'hadolint /mnt/Dockerfile'
+            }
+        }
+
+        stage('Containerize App') {
+            steps {
+                sh 'docker build -t yuriypelykh/ypwp-php-fpm:${BUILD_NUMBER} -t yuriypelykh/ypwp-php-fpm:latest .'
             }
         }
 
