@@ -1,0 +1,66 @@
+version: '3.3'
+services:
+  
+  # Nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - wp_app:/var/www/html
+      - ./nginx-config:/etc/nginx/conf.d
+      - certbot:/etc/letsencrypt
+  
+  # PHP
+  php-fpm:
+    depends_on:
+      - db
+    build: ./
+    # image: yuriypelykh/php8-fpm-mysqli
+    container_name: php-fpm
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+      - DB_NAME=wordpress
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - wp_app/:/var/www/html
+
+  ## Database
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_DATABASE=wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+
+  ## Certbot service
+  certbot:
+    depends_on:
+      - nginx
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot:/etc/letsencrypt
+      - wp_app/:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email yuriypelykh@google.com --agree-tos --no-eff-email --force-renewal -d test09.netpeak.tech
+  
+#Volumes
+volumes:
+  db_data:
+    driver: local
+  wp_app:
+    driver: local
+  certbot:
+    driver: local

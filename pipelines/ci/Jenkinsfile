@@ -1,0 +1,31 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO = "YuriyPelykh/NPTT"
+        // GIT_CREDENTIAL_ID = "NPTT-Git-SSH"
+        // DOCKERHUB_CREDENTIAL_ID = ""
+    }
+    
+    stages {
+        stage('Pull from SCM') {
+            steps {
+                echo "Hi There!"
+            }
+        }
+
+        stage('Containerize app') {
+            steps {
+                echo "Build"
+            }
+        }
+
+        stage('Push to registry') {
+            steps {
+                echo "Push"
+            }
+        }
+    }
+}
