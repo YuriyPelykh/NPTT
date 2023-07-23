@@ -50,12 +50,6 @@ pipeline {
 
         stage('Trigger Deploy job') {
             steps {
-                // build job: 'CD_Pipeline', 
-                //     parameters: [
-                //         string(name: 'IMAGE_TAG', value: String.valueOf(BUILD_NUMBER))
-                //     ],
-                //     wait: false
-
                 build([
                     job: 'CD_Pipeline',
                     wait: false,

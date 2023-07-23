@@ -4,10 +4,6 @@ pipeline {
     
     agent any
 
-    // parameters {
-    //     string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
-    // }
-
     environment {
         GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
         GITHUB_CREDENTIAL_ID = "Jenkins_GitHub_Key"
@@ -15,7 +11,6 @@ pipeline {
         MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
         DOCKERHUB_REPO = "yuriypelykh"
         DOCKER_IMAGE_NAME = "ypwp-php-fpm"
-        // IMAGE_TAG="18"
     }
     
     stages {
