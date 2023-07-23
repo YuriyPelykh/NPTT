@@ -43,7 +43,7 @@ pipeline {
                 sh '''MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_CREDENTIALS_PSW} \
                       MYSQL_USER=${MYSQL_USER_CREDENTIALS_USR} \
                       MYSQL_PASSWORD=${MYSQL_USER_CREDENTIALS_PSW} \
-                      IMAGE_TAG=${IMAGE_TAG}
+                      IMAGE_TAG=${IMAGE_TAG} \
                       docker-compose up -d --force-recreate db php-fpm nginx'''
             }
         }
