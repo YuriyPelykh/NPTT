@@ -10,8 +10,9 @@ pipeline {
 
     environment {
         GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
+        GITHUB_CREDENTIAL_ID = "Jenkins_GitHub_Key"
         MYSQL_USER_CREDENTIALS = credentials('MySQL_User_Credentials')
-        MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
+        // MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
         DOCKERHUB_REPO = "yuriypelykh"
         DOCKER_IMAGE_NAME = "ypwp-php-fpm"
     }
