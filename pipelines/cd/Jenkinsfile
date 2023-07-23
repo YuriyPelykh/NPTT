@@ -9,6 +9,7 @@ pipeline {
     }
 
     environment {
+        GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
         MYSQL_USER_CREDENTIALS = credentials('MySQL_User_Credentials')
         MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
         DOCKERHUB_REPO = "yuriypelykh"
@@ -16,6 +17,15 @@ pipeline {
     }
     
     stages {
+        stage('Pull code from SCM') {
+            steps {
+                git branch: 'master',
+                    credentialsId: "${GITHUB_CREDENTIAL_ID}",
+                    url: "${GITHUB_REPO}"
+                sh "ls -lah"
+            }
+        }
+
         stage('Sync app volume') {
             steps {
                 // echo "${IMAGE_TAG}"

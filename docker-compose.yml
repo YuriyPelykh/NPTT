@@ -22,8 +22,8 @@ services:
     image: yuriypelykh/ypwp-php-fpm:latest
     container_name: php-fpm
     restart: unless-stopped
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     environment:
       - DB_HOST=db
       - DB_NAME=wordpress
@@ -37,8 +37,8 @@ services:
     image: mysql:8.0
     container_name: db
     restart: unless-stopped
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     environment:
       - MYSQL_DATABASE=wordpress
     volumes:
