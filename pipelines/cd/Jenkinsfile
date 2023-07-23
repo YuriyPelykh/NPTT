@@ -32,7 +32,6 @@ pipeline {
             steps {
                 script {
                     def test = JOB_NAME.toLowerCase()
-                    println ${test}
                 }
                 echo "${test}"
                 sh "docker run -d --rm --name temp --volume ${CURRENT_DIR}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
