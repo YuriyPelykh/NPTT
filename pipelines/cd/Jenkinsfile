@@ -4,9 +4,9 @@ pipeline {
     
     agent any
 
-    parameters {
-        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
-    }
+    // parameters {
+    //     string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
+    // }
 
     environment {
         GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
@@ -15,7 +15,7 @@ pipeline {
         MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
         DOCKERHUB_REPO = "yuriypelykh"
         DOCKER_IMAGE_NAME = "ypwp-php-fpm"
-        IMAGE_TAG="18"
+        // IMAGE_TAG="18"
     }
     
     stages {
@@ -34,7 +34,7 @@ pipeline {
                     CURRENT_DIR = JOB_NAME.toLowerCase()
                 }
                 echo "${CURRENT_DIR}"
-                sh "docker run -d --rm --name temp --volume ${CURRENT_DIR}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:18 sh -c 'cp -r ./* /mnt/'"
+                sh "docker run -d --rm --name temp --volume ${CURRENT_DIR}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:${IMAGE_TAG} sh -c 'cp -r ./* /mnt/'"
             }
         }
         

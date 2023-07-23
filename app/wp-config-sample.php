@@ -1,5 +1,5 @@
 <?php
-/** TEST STRING ver16
+/** TEST STRING ver25
  * The base configuration for WordPress
  *
  * The wp-config.php creation script uses this file during the installation.
