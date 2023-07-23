@@ -9,14 +9,26 @@ pipeline {
     }
 
     environment {
-        DOCKER_COMPOSE_ENV_FILE = credentials('Docker-compose-env-file')
+        MYSQL_USER_CREDENTIALS = credentials('MySQL_User_Credentials')
+        MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
+        DOCKERHUB_REPO = "yuriypelykh"
+        DOCKER_IMAGE_NAME = "ypwp-php-fpm"
     }
     
     stages {
+        stage('Sync app volume') {
+            steps {
+                // echo "${IMAGE_TAG}"
+                sh "docker run -d --rm --name temp --volume rocca_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
+            }
+        }
+        
         stage('Deploy') {
             steps {
                 // echo "${IMAGE_TAG}"
-                sh "docker-compose --env-file ${DOCKER_COMPOSE_ENV_FILE} up -d --force-recreate --no-deps php-fpm"
+                sh '''MYSQL_USER=${MYSQL_USER_CREDENTIALS_USR} \
+                      MYSQL_PASSWORD=${MYSQL_USER_CREDENTIALS_PSW} \
+                      docker-compose up -d php-fpm nginx'''
             }
         }
     }
