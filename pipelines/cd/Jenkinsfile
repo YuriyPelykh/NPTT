@@ -15,7 +15,7 @@ pipeline {
         MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
         DOCKERHUB_REPO = "yuriypelykh"
         DOCKER_IMAGE_NAME = "ypwp-php-fpm"
-        CURRENT_DIR = ""
+        // CURRENT_DIR = ""
     }
     
     stages {
@@ -30,11 +30,11 @@ pipeline {
 
         stage('Sync app volume') {
             steps {
-                echo "${JOB_NAME}"
-                script{
-                    def CURRENT_DIR = JOB_NAME.toLowerCase(); 
+                script {
+                    def test = JOB_NAME.toLowerCase()
+                    println ${test}
                 }
-                echo "${CURRENT_DIR}"
+                echo "${test}"
                 sh "docker run -d --rm --name temp --volume ${CURRENT_DIR}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
             }
         }
