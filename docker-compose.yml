@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     # build: ./
-    image: yuriypelykh/ypwp-php-fpm:latest
+    image: yuriypelykh/ypwp-php-fpm:${IMAGE_TAG}
     container_name: php-fpm
     restart: unless-stopped
     # env_file:

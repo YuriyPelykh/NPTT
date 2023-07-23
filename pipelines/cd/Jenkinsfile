@@ -16,6 +16,7 @@ pipeline {
         DOCKERHUB_REPO = "yuriypelykh"
         DOCKER_IMAGE_NAME = "ypwp-php-fpm"
         // CURRENT_DIR = ""
+        IMAGE_TAG="18"
     }
     
     stages {
@@ -34,7 +35,7 @@ pipeline {
                     def test = JOB_NAME.toLowerCase()
                 }
                 echo "${test}"
-                sh "docker run -d --rm --name temp --volume ${CURRENT_DIR}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
+                sh "docker run -d --rm --name temp --volume ${test}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
             }
         }
         
@@ -43,6 +44,7 @@ pipeline {
                 sh '''MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_CREDENTIALS_PSW} \
                       MYSQL_USER=${MYSQL_USER_CREDENTIALS_USR} \
                       MYSQL_PASSWORD=${MYSQL_USER_CREDENTIALS_PSW} \
+                      IMAGE_TAG=${IMAGE_TAG}
                       docker-compose up -d --force-recreate db php-fpm nginx'''
             }
         }
