@@ -12,7 +12,7 @@ pipeline {
         GITHUB_REPO = "git@github.com:YuriyPelykh/NPTT.git"
         GITHUB_CREDENTIAL_ID = "Jenkins_GitHub_Key"
         MYSQL_USER_CREDENTIALS = credentials('MySQL_User_Credentials')
-        // MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
+        MYSQL_ROOT_CREDENTIALS = credentials('MySQL_Root_Credentials')
         DOCKERHUB_REPO = "yuriypelykh"
         DOCKER_IMAGE_NAME = "ypwp-php-fpm"
     }
@@ -29,17 +29,20 @@ pipeline {
 
         stage('Sync app volume') {
             steps {
-                // echo "${IMAGE_TAG}"
-                sh "docker run -d --rm --name temp --volume rocca_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
+                script{
+                    def CUR_DIR = JOB_NAME.toLowerCase(); 
+                }
+                sh "docker run -d --rm --name temp --volume ${CUR_DIR}_wp_app:/mnt/ ${DOCKERHUB_REPO}/${DOCKER_IMAGE_NAME}:16 sh -c 'cp -r ./* /mnt/'"
             }
         }
         
         stage('Deploy') {
             steps {
                 // echo "${IMAGE_TAG}"
-                sh '''MYSQL_USER=${MYSQL_USER_CREDENTIALS_USR} \
+                sh '''MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_CREDENTIALS_PSW} \
+                      MYSQL_USER=${MYSQL_USER_CREDENTIALS_USR} \
                       MYSQL_PASSWORD=${MYSQL_USER_CREDENTIALS_PSW} \
-                      docker-compose up -d php-fpm nginx'''
+                      docker-compose up -d --force-recreate db php-fpm nginx'''
             }
         }
     }
